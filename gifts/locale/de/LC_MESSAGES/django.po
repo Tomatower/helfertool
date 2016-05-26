@@ -29,7 +29,7 @@ msgstr "Anwesend"
 
 #: gifts/models/deservedgiftset.py:22
 msgid "Helper got gift"
-msgstr "Helfer hat Geschenk erhalten"
+msgstr "Helferin/Helfer hat Geschenk erhalten"
 
 #: gifts/models/gift.py:10 gifts/models/set.py:14
 #: gifts/templates/gifts/list.html:11 gifts/templates/gifts/list.html:38

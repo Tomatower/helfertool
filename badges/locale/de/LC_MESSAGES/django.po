@@ -16,9 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.6.10\n"
 
-#: badges/forms/badge.py:38 badges/forms/design.py:23 badges/forms/design.py:29
+#: badges/forms/badge.py:38 badges/forms/design.py:23
+#: badges/forms/design.py:29
 msgid "The file is not an image."
 msgstr "Die Datei ist kein Bild."
 
@@ -160,11 +161,11 @@ msgstr "Badge Sprache"
 
 #: badges/models/settings.py:59
 msgid "Role for coordinators"
-msgstr "Rolle für Koordinatoren"
+msgstr "Rolle für Koordinatorinnen/Koordinatoren"
 
 #: badges/models/settings.py:65
 msgid "Role for helpers"
-msgstr "Rolle für Helfer"
+msgstr "Rolle für Helferinnen/Helfer"
 
 #: badges/models/settings.py:70
 msgid "Badges only for coordinators"
