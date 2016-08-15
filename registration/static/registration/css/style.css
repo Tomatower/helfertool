@@ -141,3 +141,30 @@ div.logos-about div
 {
     padding-left: 1.5em;
 }
+
+.sidebar
+{
+    margin-left: -10px;
+}
+
+@media(min-width:768px)
+{
+    .sidebar
+    {
+        z-index: 1;
+        position: absolute;
+        width: 200px;
+        margin-top: 51px;
+    }
+
+    .content-wrapper
+    {
+        margin-left: 200px;
+        position: inherit;
+    }
+}
+
+.container-auto-width
+{
+    position: auto!important;
+}
