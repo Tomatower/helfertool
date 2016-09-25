@@ -18,8 +18,6 @@ class ShiftForm(forms.ModelForm):
         }
         widgets = {
             'number': forms.NumberInput(attrs={'min': 0}),
-            'begin': forms.DateTimeInput(attrs={'class': 'datetime'}),
-            'end': forms.DateTimeInput(attrs={'class': 'datetime'}),
         }
 
     def __init__(self, *args, **kwargs):

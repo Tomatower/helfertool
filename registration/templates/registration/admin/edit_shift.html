@@ -19,8 +19,8 @@
         <div class="row">
             <div class="col-xs-12 col-lg-5">
                 {% bootstrap_field form.name %}
-                {% bootstrap_field form.begin %}
-                {% bootstrap_field form.end %}
+                {% bootstrap_field form.begin field_class='datetime' addon_after='<span class="glyphicon glyphicon-calendar"></span>' %}
+                {% bootstrap_field form.end field_class='datetime' addon_after='<span class="glyphicon glyphicon-calendar"></span>' %}
                 {% bootstrap_field form.number %}
                 {% bootstrap_field form.blocked %}
             </div>
@@ -35,7 +35,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $('.datetime').datetimepicker({ locale: '{{ LANGUAGE_CODE }}',
+            $('.datetime .input-group').datetimepicker({ locale: '{{ LANGUAGE_CODE }}',
                 {% if LANGUAGE_CODE == "en" %}
                     format: 'YYYY-MM-DD HH:mm'
                 {% endif %}
