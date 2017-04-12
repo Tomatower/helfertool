@@ -255,7 +255,6 @@ urlpatterns = [
         views.export_beershirtlist,
         name='export_beershirts'),
 
-
     # summaries
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/coordinators/$',
         views.coordinators,
