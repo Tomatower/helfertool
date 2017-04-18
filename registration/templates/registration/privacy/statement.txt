@@ -11,10 +11,9 @@ Ich bin darauf hingewiesen worden, dass die im Rahmen der vorstehend genannten Z
 
 Ich bin zudem darauf hingewiesen worden, dass die Erhebung, Verarbeitung und Nutzung meiner Daten auf freiwilliger Basis erfolgt. Ferner, dass ich mein Einverständnis mit der Folge, dass ich bei der Veranstaltung nicht als Helfer teilnehmen kann, verweigern bzw. jederzeit mit Wirkung für die Zukunft widerrufen kann. Meine Widerrufserklärung werde ich richten an:
 
-Fachschaft MPI
-Technische Universität München
-Boltzmannstraße 3
-85748 Garching
+Verein Kulturleben in der Studentenstadt
+Christoph-Probst-Str. 12/027
+80805 München
 E-Mail: {% setting "CONTACT_MAIL" %}
 
 Im Fall des Widerrufs werden mit dem Zugang meiner Widerrufserklärung meine Daten gelöscht.{% else %}
@@ -33,10 +32,10 @@ Furthermore, you can revoke your consent at any time with the adverse consequenc
 
 Please send any notice of cancellation to:
 
-Fachschaft MPI
-Technische Universität München
-Boltzmannstraße 3
-85748 Garching
+
+Verein Kulturleben in der Studentenstadt
+Christoph-Probst-Str. 12/027
+80805 München
 E-Mail: {% setting "CONTACT_MAIL" %}
 
 In the event of cancellation, your data will be deleted upon receipt of your notice.{% endif %}
