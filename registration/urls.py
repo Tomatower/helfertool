@@ -236,11 +236,11 @@ urlpatterns = [
         name='export_job_date'),
 
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/helpers/$',
-        views.export_helpers, # TODO
+        views.export_helpers,
         name='export_helpers'),
 
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/entry/$',
-        views.export_entry, 
+        views.export_entry,
         name='export_entry'),
 
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/gifts/$',

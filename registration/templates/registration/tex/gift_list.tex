@@ -24,9 +24,9 @@
 {% for shift in job.shift_set.all %}
 \subsubsection*{ {{ shift.time_with_day |latex}} {{shift.name |latex }} }
 
-\noindent\begin{tabularx}{\textwidth}{|l|l|l|l|l|l|l}
+\noindent\begin{tabularx}{\textwidth}{|l|l|l|l|l|l|l|l}
 \hline
-Name & Vorname & Telefon & Email & B & E & Unterschrift \\
+	Name & Vorname & Telefon & Email & B & E & P &Unterschrift \\
 \hline
 \hline
 {% with shift_gifts|bykey:shift.id as gift %}
@@ -37,6 +37,7 @@ Name & Vorname & Telefon & Email & B & E & Unterschrift \\
 	& {{ helper.email |latex}}
 	& {{ gift.beer|latex }}
 	& {{ gift.food|latex }}
+	& {% if shift.deposit %}P{% endif %}
 %	& {{ gift.vhshirt |latex }}
 %	& {{ gift.beershirt |latex }}
 	& \\
@@ -46,7 +47,7 @@ Name & Vorname & Telefon & Email & B & E & Unterschrift \\
 {% with missing_shifts|bykey:shift.id as m %}
 {% with ''|center:m as range %}
 {% for _ in range %}
-& & & & {{ gift.beer |latex}} & {{ gift.food |latex}} & \\
+	& & & & {{ gift.beer |latex}} & {{ gift.food |latex}} & {% if shift.deposit %}P{% endif %} &\\
 \hline
 {% endfor %}
 {% endwith %}

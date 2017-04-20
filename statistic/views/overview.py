@@ -9,6 +9,7 @@ from registration.models import Event, Shift
 
 from registration.views.utils import nopermission
 
+from pprint import pprint
 
 @login_required
 @archived_not_available
@@ -27,11 +28,11 @@ def overview(request, event_url_name):
         if helper.is_coordinator:
             num_coordinators += 1
         else:
-            day = helper.timestamp.strftime('%Y-%m-%d')
-            if day in timeline:
-                timeline[day] += 1
+            time = helper.timestamp.strftime('%Y-%m-%d %H:00')
+            if time in timeline:
+                timeline[time] += 1
             else:
-                timeline[day] = 1
+                timeline[time] = 1
 
     num_vegetarians = event.helper_set.filter(vegetarian=True).count()
 
@@ -48,6 +49,8 @@ def overview(request, event_url_name):
     timeline = OrderedDict(sorted(timeline.items()))
     timeline_sum = OrderedDict()
     tmp = 0
+
+
     for day in timeline:
         tmp += timeline[day]
         timeline_sum[day] = tmp
