@@ -15,7 +15,7 @@ from ..export.tex_pdf import pdflatex
 from ..decorators import archived_not_available
 
 
-def export_userlist(request, event_url_name, type, template, file_append, event=None):
+def export_userlist(request, event_url_name, type, template, file_append, event=None, extra=None):
     # check for valid export type
     if type not in ["excel", "pdf"]:
         print ("Type missmatch: %s" % type)
@@ -35,6 +35,9 @@ def export_userlist(request, event_url_name, type, template, file_append, event=
     # escape filename
     filename = escape_filename(filename)
 
+    if not extra is None:
+        event.update(extra)
+
     # create buffer
     with BytesIO() as responsebuffer:
         filename = "%s.pdf" % filename
@@ -48,6 +51,7 @@ def export_userlist(request, event_url_name, type, template, file_append, event=
         # close buffer, send file
         response.write(responsebuffer.getvalue())
     return response
+
 
 def calc_shift_property(event):
     missing_shifts = {};
@@ -96,6 +100,20 @@ def calc_user_gifts(event):
                 user_gifts[helper.id]['beershirt'] += shift_gifts['beershirt']
     return user_gifts
 
+
+def calc_deposit(event):
+    deposit = {}
+    for job in event.job_set.all():
+        for shift in job.shift_set.all():
+            for helper in shift.helper_set.all():
+                if shift.deposit:
+                    if not helper.id in deposit:
+                        deposit[helper.id] = True
+                else:
+                    deposit[helper.id] = False
+    return deposit
+
+
 @login_required
 @archived_not_available
 def export_helpers(request, event_url_name, type):
@@ -106,13 +124,15 @@ def export_helpers(request, event_url_name, type):
 @login_required
 @archived_not_available
 def export_entry(request, event_url_name, type):
+    event = { 'event' : get_object_or_404(Event, url_name=event_url_name) }
+    deposit = {'deposit' : calc_deposit(event['event']), }
     return export_userlist(request, event_url_name, type,
-                           "registration/tex/entry_list.tex", "eintritt")
+                           "registration/tex/entry_list.tex", "eintritt", event=event, extra=deposit)
+
 
 @login_required
 @archived_not_available
 def export_giftlist(request, event_url_name, type):
-
     if type not in ["pdf"]:
         print ("Type missmatch: %s" % type)
         raise Http404
@@ -125,12 +145,14 @@ def export_giftlist(request, event_url_name, type):
     if not event.is_admin(request.user):
         return nopermission(request)
 
-    #Todo: Calculate gifts
     shift_gifts, missing_shifts = calc_shift_property(event)
+    deposit = calc_deposit(event)
+
     e = {
             'event':event,
             'missing_shifts':missing_shifts,
             'shift_gifts': shift_gifts,
+            'deposit' : deposit,
     }
 
     return export_userlist(request, event_url_name, type,

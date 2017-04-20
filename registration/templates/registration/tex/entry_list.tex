@@ -16,14 +16,16 @@
 
 \begin{document}
 \section*{Eintrittsliste}
-\noindent\begin{tabularx}{\textwidth}{|l|l|l}
+\noindent\begin{tabularx}{\textwidth}{|l|l|l|c|l}
 \hline
-Name & Vorname & Unterschrift \\
+	Nachname & Vorname & Unterschrift Helfer & P & Pfand Erhalten \\
 \hline
 \hline
 {% for helper in event.helper_set.all  %}
-	{{ helper.surname |latex}} & {{ helper.firstname |latex}} & \\
+{% with deposit|bykey:helper.id as deposit_required %}
+	{{ helper.surname |latex}} & {{ helper.firstname |latex}} & & {% if deposit_required %} P {% endif %} & \\
 \hline
+{% endwith %}
 {% endfor %}
 \end{tabularx}
 

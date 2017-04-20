@@ -22,6 +22,7 @@ class Shift(models.Model):
         :number: number of people
         :blocked: shift is blocked, if the job is public
         :name: name of the shift (optional)
+        :deposit: a deposit has to be made in advance to receive the gifts
     """
     class Meta:
         ordering = ['job', 'begin', 'end']
@@ -61,6 +62,11 @@ class Shift(models.Model):
         'gifts.GiftSet',
         verbose_name=_("Gifts"),
         blank=True,
+    )
+
+    deposit = models.BooleanField(
+        default=False,
+        verbose_name=_("A deposit has to be made to receive the gifts."),
     )
 
     archived_number = models.IntegerField(
