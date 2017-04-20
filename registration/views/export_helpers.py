@@ -108,9 +108,14 @@ def calc_deposit(event):
             for helper in shift.helper_set.all():
                 if shift.deposit:
                     if not helper.id in deposit:
-                        deposit[helper.id] = True
+                        deposit[helper.id] = "PE"
+                    elif deposit[helper.id] == "":
+                        deposit[helper.id] = "P"
                 else:
-                    deposit[helper.id] = False
+                    if not helper.id in deposit:
+                        deposit[helper.id] = ""
+                    elif deposit[helper.id] == "PE":
+                        deposit[helper.id] = "P"
     return deposit
 
 
