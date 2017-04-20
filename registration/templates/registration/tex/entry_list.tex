@@ -23,7 +23,7 @@
 \hline
 {% for helper in event.helper_set.all  %}
 {% with deposit|bykey:helper.id as deposit_required %}
-	{{ helper.surname |latex}} & {{ helper.firstname |latex}} & & {% if deposit_required %} P {% endif %} & \\
+	{{ helper.surname |latex}} & {{ helper.firstname |latex}} & & {{ deposit_required }} & \\
 \hline
 {% endwith %}
 {% endfor %}
