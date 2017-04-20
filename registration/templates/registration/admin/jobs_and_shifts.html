@@ -54,6 +54,7 @@
                     <th>{% trans "End" %}</th>
                     <th>{% trans "Name" %}</th>
                     <th>{% trans "Number of helpers" %}</th>
+                    <th>{% trans "Deposit" %}</th>
                     {% if event.gifts %}
                         <th>{% trans "Gifts" %}</th>
                     {% endif %}
@@ -73,6 +74,7 @@
                         <td>{{ shift.end }}</td>
                         <td>{{ shift.name }}</td>
                         <td>{{ shift.number }}</td>
+						<td>{% if shift.deposit %}P{%endif%}</td>
                         {% if event.gifts %}
                             <td>
                                 {% for gift in shift.gifts.all %}
