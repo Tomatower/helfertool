@@ -77,7 +77,7 @@ def calc_user_gifts(event):
     user_gifts = {}
     for job in event.job_set.all():
         for shift in job.shift_set.all():
-            shift_gifts = {}
+            shift_gifts = {'beer':0,'food':0, 'vhshirt':0, 'beershirt':0}
             for giftset in shift.gifts.all():
                 tmp = {1:0,2:0,3:0,4:0,}
                 for gift in giftset.includedgift_set.all():
@@ -177,6 +177,11 @@ def export_giftlist_by_day(request, event_url_name, type):
                     'num_missing': range(shift.number - shift.num_helpers()),
                     'num_registered': shift.num_helpers(),
                     'helpers':shift.helper_set.all() }
+
+    days = sorted(days)
+    for d in days:
+        for j in d['jobs']:
+            j['shifts'] = sorted(j['shifts'])
     e = {
             'days':days,
             'event':event,
@@ -227,6 +232,12 @@ def export_giftlist_by_ressort(request, event_url_name, type):
                     'helpers':shift.helper_set.all() }
             jout['day'][shift.time_day()]['shifts'].append(sout)
         jobs[job.id] = jout
+
+    for j in jobs:
+        j['days'] = sorted(j['days'])
+        for d in j['days']:
+            j['shifts'] = sorted(j['shifts'])
+
     e = {
             'jobs':jobs,
             'event':event,
