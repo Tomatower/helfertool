@@ -38,11 +38,15 @@
 				 Helferliste
             </a>
             &nbsp;
-			<a href="{% url 'export_gifts' event.url_name 'pdf' %}" >
-				 Marken-Liste
+			<a href="{% url 'export_gifts_by_ressort' event.url_name 'pdf' %}" >
+				 Marken-Liste (nach Ressort)
             </a>
 			&nbsp;
-            <a href="{% url 'export_entry' event.url_name 'pdf' %}" >
+   			<a href="{% url 'export_gifts_by_day' event.url_name 'pdf' %}" >
+				 Marken-Liste (nach Datum)
+            </a>
+			&nbsp;
+			<a href="{% url 'export_entry' event.url_name 'pdf' %}" >
 				 Eintrittsliste
             </a>
             &nbsp; 
@@ -52,6 +56,10 @@
             &nbsp;
 			<a href="{% url 'export_beershirts' event.url_name 'pdf' %}" >
 				 Bierteam-Shirts
+            </a>
+            &nbsp;
+			<a href="{% url 'export_deposit' event.url_name 'pdf' %}" >
+				 Pfandliste
             </a>
         </p>
         <div id="exportdays" class="collapse">

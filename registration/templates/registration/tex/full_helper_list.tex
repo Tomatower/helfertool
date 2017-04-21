@@ -7,25 +7,43 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
-\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{fancyhdr}
 
-\usepackage[top=2.5cm,bottom=2.5cm,left=1.3cm,right=1.3cm]{geometry}
+\usepackage[top=1.5cm,bottom=1.5cm,left=1.7cm,right=1.5cm]{geometry}
 
-\title{Alle Helfer}
-\date{}
+\renewcommand*{\arraystretch}{1.5}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[C]{\rightmark}%
+  \fancyhead[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
+}
+\pagestyle{plain}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand\thesection{} %% Disable section counting
 
 \begin{document}
-\section*{Helferliste}
-\noindent\begin{tabularx}{\textwidth}{|l|l|l|l|l|l}
+\section{Helferliste}
+
+\noindent
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\begin{longtable}{|p{4.5cm}|p{2.2cm}|p{2.2cm}|p{4.5cm}|p{2cm}}
 \hline
-Name & Vorname & Adresse & Telefon & Email & Kommentar \\
+	Name & Adresse & Telefon & Email & Kommentar \\
 \hline
 \hline
-{% for helper in event.helper_set.all %}
-{{ helper.surname |latex}} & {{ helper.firstname |latex}} & [[TBD]] & {{ helper.phone |latex}} & {{ helper.email |latex}} \\
+{% for helper in event.helper_set.all|helpersort:"surname" %}
+{{ helper.surname |latex}}, {{ helper.firstname |latex}} 
+	& [[TBD]] 
+	& {{ helper.phone |latex}} 
+	& {{ helper.email |latex}} \\
 \hline
 {% endfor %}
-\end{tabularx}
+\end{longtable}
 
 \end{document}
 {% endautoescape %}
