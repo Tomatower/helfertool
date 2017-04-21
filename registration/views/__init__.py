@@ -10,7 +10,7 @@ from .helper import helpers, add_helper, edit_helper, delete_helper, \
     add_helper_as_coordinator, search_helper, view_helper, resend_mail
 from .link import links, edit_link, delete_link
 from .export import export
-from .export_helpers import export_helpers, export_entry, export_giftlist, export_shirtlist, export_beershirtlist
+from .export_helpers import export_helpers, export_entry, export_giftlist_by_ressort, export_giftlist_by_day, export_shirtlist, export_beershirtlist, export_depositlist
 from .permissions import permissions, delete_permission
 from .account import change_user
 from .duplicates import duplicates, merge

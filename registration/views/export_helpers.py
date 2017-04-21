@@ -5,6 +5,9 @@ from django.utils.dateparse import parse_date
 
 from io import BytesIO
 
+from copy import deepcopy
+from pprint import pprint
+
 from .utils import nopermission
 
 from ..models import Event, Job, Shift
@@ -37,7 +40,6 @@ def export_userlist(request, event_url_name, type, template, file_append, event=
 
     if not extra is None:
         event.update(extra)
-
     # create buffer
     with BytesIO() as responsebuffer:
         filename = "%s.pdf" % filename
@@ -87,7 +89,6 @@ def calc_user_gifts(event):
                         'beershirt': tmp[4]/10 }
 
             for helper in shift.helper_set.all():
-                print(dir(helper))
                 if not helper.id in user_gifts:
                     user_gifts[helper.id] = {
                         'beer': 0,
@@ -108,13 +109,13 @@ def calc_deposit(event):
             for helper in shift.helper_set.all():
                 if shift.deposit:
                     if not helper.id in deposit:
-                        deposit[helper.id] = "PE"
+                        deposit[helper.id] = "P"
                     elif deposit[helper.id] == "":
                         deposit[helper.id] = "P"
                 else:
                     if not helper.id in deposit:
                         deposit[helper.id] = ""
-                    elif deposit[helper.id] == "PE":
+                    elif deposit[helper.id] == "P":
                         deposit[helper.id] = "P"
     return deposit
 
@@ -134,10 +135,9 @@ def export_entry(request, event_url_name, type):
     return export_userlist(request, event_url_name, type,
                            "registration/tex/entry_list.tex", "eintritt", event=event, extra=deposit)
 
-
 @login_required
 @archived_not_available
-def export_giftlist(request, event_url_name, type):
+def export_giftlist_by_day(request, event_url_name, type):
     if type not in ["pdf"]:
         print ("Type missmatch: %s" % type)
         raise Http404
@@ -151,17 +151,89 @@ def export_giftlist(request, event_url_name, type):
         return nopermission(request)
 
     shift_gifts, missing_shifts = calc_shift_property(event)
-    deposit = calc_deposit(event)
 
+    # Day / Job / Shift / Helper
+    days = {}
+    dow_to_str = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
+    for job in event.job_set.all():
+        jout = {
+                'name':job.name,
+                'shifts':{}
+                }
+
+        for shift in job.shift_set.all():
+            if not shift.time_day in days:
+                days[shift.time_day()] = {
+                        'dow':dow_to_str[shift.time_day_of_week()],
+                        'jobs':{job.id:deepcopy(jout) } }
+            elif not job.id in days[shift.time_day()]['jobs']:
+                days[shift.time_day()]['jobs'][job.id] = deepcopy(jout)
+
+            days[shift.time_day()]['jobs'][job.id]['shifts'][shift.id] = {
+                    'id':shift.id,
+                    'time':shift.time_hours(),
+                    'name':shift.name,
+                    'number':shift.number,
+                    'num_missing': range(shift.number - shift.num_helpers()),
+                    'num_registered': shift.num_helpers(),
+                    'helpers':shift.helper_set.all() }
     e = {
+            'days':days,
             'event':event,
-            'missing_shifts':missing_shifts,
             'shift_gifts': shift_gifts,
-            'deposit' : deposit,
     }
-
     return export_userlist(request, event_url_name, type,
-                           "registration/tex/gift_list.tex", "marken", e)
+                           "registration/tex/gift_list_by_day.tex", "marken", e)
+
+
+@login_required
+@archived_not_available
+def export_giftlist_by_ressort(request, event_url_name, type):
+    if type not in ["pdf"]:
+        print ("Type missmatch: %s" % type)
+        raise Http404
+
+    # get event
+    event = get_object_or_404(Event, url_name=event_url_name)
+
+    # list of jobs for export
+    # check permission
+    if not event.is_admin(request.user):
+        return nopermission(request)
+
+    shift_gifts, missing_shifts = calc_shift_property(event)
+
+    # Job / Day / Shift / Helper
+    jobs = {}
+    dow_to_str = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
+    for job in event.job_set.all():
+        jout = {
+                'day':{},
+                'name':job.name,
+                }
+
+        for shift in job.shift_set.all():
+            if not shift.time_day in jout['day']:
+                jout['day'][shift.time_day()] = {
+                        'dow':dow_to_str[shift.time_day_of_week()],
+                        'shifts':[] }
+
+            sout = {'id':shift.id,
+                    'time':shift.time_hours(),
+                    'name':shift.name,
+                    'number':shift.number,
+                    'num_missing': range(shift.number - shift.num_helpers()),
+                    'num_registered': shift.num_helpers(),
+                    'helpers':shift.helper_set.all() }
+            jout['day'][shift.time_day()]['shifts'].append(sout)
+        jobs[job.id] = jout
+    e = {
+            'jobs':jobs,
+            'event':event,
+            'shift_gifts': shift_gifts,
+    }
+    return export_userlist(request, event_url_name, type,
+                           "registration/tex/gift_list_by_ressort.tex", "marken", e)
 
 @login_required
 @archived_not_available
@@ -213,5 +285,30 @@ def export_beershirtlist(request, event_url_name, type):
 
     return export_userlist(request, event_url_name, type,
                            "registration/tex/beer_shirt_list.tex", "biershirts", e)
+
+@login_required
+@archived_not_available
+def export_depositlist(request, event_url_name, type):
+
+    if type not in ["pdf"]:
+        print ("Type missmatch: %s" % type)
+        raise Http404
+
+    # get event
+    event = get_object_or_404(Event, url_name=event_url_name)
+
+    # list of jobs for export
+    # check permission
+    if not event.is_admin(request.user):
+        return nopermission(request)
+
+    user_gifts = calc_user_gifts(event)
+    deposit = calc_deposit(event)
+    e = {
+            'event':event,
+            'deposit': deposit,
+    }
+    return export_userlist(request, event_url_name, type,
+                           "registration/tex/deposit_list.tex", "pfandliste", e)
 
 

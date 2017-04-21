@@ -31,15 +31,19 @@
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
-\begin{longtable}{|p{4.7cm}|p{1.0cm}|p{6cm}|}
+\begin{longtable}{|p{4.7cm}|p{6cm}|p{6cm}|}
 \hline
-	Name & Pfand & Unterschrift Helfer  \\
+	Name & Pfand Erhalten(Infozelt) & Pfand zurück (Helfer)  \\
 \hline
 \hline
 	{% for helper in event.helper_set.all|helpersort:"surname" %}
 {% with deposit|bykey:helper.id as deposit_required %}
-	{{ helper.surname |latex}}, {{ helper.firstname |latex}} & {{ deposit_required }} &  \\
+	{% if "P" in deposit_required %}
+	{{ helper.surname |latex}}, {{ helper.firstname |latex}} 
+	& 
+	&  \\
 \hline
+	{%endif %}
 {% endwith %}
 {% endfor %}
 \end{longtable}

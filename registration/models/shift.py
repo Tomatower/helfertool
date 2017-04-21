@@ -105,6 +105,15 @@ class Shift(models.Model):
         """
         day = date_f(localtime(self.begin), "l")
         return "{}, {}".format(day, self.time())
+    
+    def time_day(self):
+        """ Returns a string representation only of the day. """
+        return date_f(localtime(self.begin), 'DATE_FORMAT')
+    
+    def time_day_of_week(self):
+        """ Returns the day of week in the local time  """
+        day = localtime(self.begin)
+        return day.weekday()
 
     def num_helpers(self):
         """

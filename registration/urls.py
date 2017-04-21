@@ -243,9 +243,13 @@ urlpatterns = [
         views.export_entry,
         name='export_entry'),
 
-    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/gifts/$',
-        views.export_giftlist,
-        name='export_gifts'),
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/gifts/ressort$',
+        views.export_giftlist_by_ressort,
+        name='export_gifts_by_ressort'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/gifts/time$',
+        views.export_giftlist_by_day,
+        name='export_gifts_by_day'),
 
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/shirts/$',
         views.export_shirtlist,
@@ -254,6 +258,11 @@ urlpatterns = [
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/beershirts/$',
         views.export_beershirtlist,
         name='export_beershirts'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/deposit/$',
+        views.export_depositlist,
+        name='export_deposit'),
+
 
     # summaries
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/coordinators/$',

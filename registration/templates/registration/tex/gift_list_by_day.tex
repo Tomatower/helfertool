@@ -1,0 +1,84 @@
+{% load latex %}
+{% autoescape off %}
+
+\documentclass[a4paper,10pt]{scrartcl}
+%\documentclass[a4paper,11pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{pbox}
+\usepackage{titlesec}
+
+\usepackage[top=1.5cm,bottom=1.5cm,left=2.0cm,right=1.5cm]{geometry}
+
+\renewcommand*{\arraystretch}{1.5}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[C]{Markenliste(Datum) - \rightmark}%
+  \fancyhead[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
+}
+\pagestyle{plain}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\renewcommand\thesection{} %% Disable section counting
+\renewcommand\thesubsection{} %% Disable section counting
+\renewcommand\thesubsubsection{} %% Disable section counting
+
+\titlespacing\subsubsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
+
+\begin{document}
+\section{Markenliste (Datum)}
+{% for date,day in days.items %}
+\subsection { {{day.dow}} - {{date}} }
+
+{% for jobid,job in day.jobs.items %}
+\subsubsection{ {{ job.name |latex}} }
+\noindent
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\begin{longtable}{|p{2.1cm}|p{4.7cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
+\hline
+	Schicht & Name & B & E & P & Unterschrift \\
+{% for shiftid, shift in job.shifts.items %}
+\hline
+\hline
+{% with shift_gifts|bykey:shift.id as gift %}
+	\multirow{ {{shift.number}} }{*}{ 
+		\pbox{2.1cm} { {{shift.time |latex}}\\
+		\textbf{ {{shift.name |latex}} }}
+	}  
+{% for helper in shift.helpers.all|helpersort:"surname" %}
+	& {{ helper.surname |latex}}, {{ helper.firstname |latex}}
+	& {{ gift.beer|latex }}
+	& {{ gift.food|latex }}
+	& {% if shift.deposit %}P{% endif %} 
+	& \\
+	\cline{2-6}
+{% endfor %} %helper
+
+{% for _ in shift.num_missing %}
+	& %multirow
+	& {{ gift.beer |latex}} 
+	& {{ gift.food |latex}} 
+	& {% if shift.deposit %}P{% endif %} 
+	& \\
+	\cline{2-6}
+	{% endfor %} %missing in shift
+	\hline
+
+{% endwith %} %shift_gifts
+
+{% endfor %} %shifts
+\end{longtable}
+{% endfor %} %days
+{% endfor %} %jobs
+
+\end{document}
+{% endautoescape %}
