@@ -45,41 +45,24 @@
 \setlength\LTright{0pt}
 \begin{longtable}{|p{2.1cm}|p{4.7cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
 \hline
-	Schicht & Name & B & E & P & Unterschrift \\
-{% for shiftid, shift in job.shifts.items %}
-\hline
-\hline
-{% with shift_gifts|bykey:shift.id as gift %}
-	\multirow{ {{shift.number}} }{*}{ 
-		\pbox{2.1cm} { {{shift.time |latex}}\\
-		\textbf{ {{shift.name |latex}} }}
-	}  
-{% for helper in shift.helpers.all|helpersort:"surname" %}
+	Schicht & Name & B & E & P & Unterschrift \\ {% for shiftid, shift in job.shifts.items %}
+\hline {% with shift_gifts|bykey:shift.id as gift %}
+	\multirow{ {{shift.number}} }{*}{\pbox{2.1cm} { {{shift.time |latex}} {% if shift.name %}\\ \textbf{ {{shift.name |latex}} }{% endif %} } } {% for helper in shift.helpers.all|helpersort:"surname" %}
 	& {{ helper.surname |latex}}, {{ helper.firstname |latex}}
 	& {{ gift.beer|latex }}
 	& {{ gift.food|latex }}
 	& {% if shift.deposit %}P{% endif %} 
 	& \\
-	\cline{2-6}
-{% endfor %} %helper
-
-{% for _ in shift.num_missing %}
+	\cline{2-6} {% endfor %} {% for _ in shift.num_missing %}
 	& %multirow
 	& {{ gift.beer |latex}} 
 	& {{ gift.food |latex}} 
 	& {% if shift.deposit %}P{% endif %} 
 	& \\
-	\cline{2-6}
-	{% endfor %} %missing in shift
-	\hline
-
-{% endwith %} %shift_gifts
-
-{% endfor %} %shifts
+	\cline{2-6} {% endfor %} %missing in shift
+	\hline {% endwith %}{% endfor %} %shifts
 \end{longtable}
-\clearpage
-{% endfor %} %days
-{% endfor %} %jobs
+\clearpage {% endfor %} {% endfor %} %jobs
 
 \end{document}
 {% endautoescape %}

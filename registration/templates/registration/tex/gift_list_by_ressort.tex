@@ -37,50 +37,32 @@
 \section{Markenliste(Ressort)}
 {% for jobid, job in jobs.items %}
 \subsection{ {{ job.name |latex}} }
-
 {% for date,day in job.day.items %}
-	\subsubsection { {{day.dow}} - {{date}} }
+\subsubsection { {{day.dow}} - {{date}} }
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
 \begin{longtable}{|p{2.1cm}|p{4.7cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
 \hline
-	Schicht & Name & B & E & P & Unterschrift \\
-{% for shift in day.shifts %}
+	Schicht & Name & B & E & P & Unterschrift \\{% for shift in day.shifts %}
 \hline
-\hline
-{% with shift_gifts|bykey:shift.id as gift %}
-	\multirow{ {{shift.number}} }{*}{ 
-		\pbox{2.1cm} { {{shift.time |latex}}\\
-		\textbf{ {{shift.name |latex}} }}
-	}  
-{% for helper in shift.helpers.all|helpersort:"surname" %}
+\hline{% with shift_gifts|bykey:shift.id as gift %}
+	\multirow{ {{shift.number}} }{*}{\pbox{2.1cm} { {{shift.time |latex}} {% if shift.name %}\\ \textbf{ {{shift.name |latex}} }{% endif %} } } {% for helper in shift.helpers.all|helpersort:"surname" %}
 	& {{ helper.surname |latex}}, {{ helper.firstname |latex}}
 	& {{ gift.beer|latex }}
 	& {{ gift.food|latex }}
 	& {% if shift.deposit %}P{% endif %} 
 	& \\
-	\cline{2-6}
-{% endfor %} %helper
-
-{% for _ in shift.num_missing %}
+	\cline{2-6}{% endfor %}{% for _ in shift.num_missing %}
 	& %multirow
 	& {{ gift.beer |latex}} 
 	& {{ gift.food |latex}} 
 	& {% if shift.deposit %}P{% endif %} 
 	& \\
-	\cline{2-6}
-	{% endfor %} %missing in shift
-	\hline
-
-{% endwith %} %shift_gifts
-
-{% endfor %} %shifts
-\end{longtable}
-{% endfor %} %days
-\clearpage
-{% endfor %} %jobs
-
+	\cline{2-6}{% endfor %} %missing in shift
+	\hline {% endwith %} {% endfor %}
+\end{longtable} {% endfor %} %days
+\clearpage {% endfor %} %jobs
 
 \end{document}
 {% endautoescape %}

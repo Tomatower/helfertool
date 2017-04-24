@@ -3,6 +3,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.dateparse import parse_date
 
+from collections import OrderedDict
+
 from io import BytesIO
 
 from copy import deepcopy
@@ -46,7 +48,7 @@ def export_userlist(request, event_url_name, type, template, file_append, event=
         content_type = 'application/pdf'
         pdflatex(template, event, responsebuffer)
 
-        # start http response
+# start http response
         response = HttpResponse(content_type=content_type)
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
 
@@ -162,13 +164,20 @@ def export_giftlist_by_day(request, event_url_name, type):
                 }
 
         for shift in job.shift_set.all():
-            if not shift.time_day in days:
+            if not shift.time_day() in days:
                 days[shift.time_day()] = {
                         'dow':dow_to_str[shift.time_day_of_week()],
-                        'jobs':{job.id:deepcopy(jout) } }
+                        'jobs':{job.id: { 
+                            'name': job.name,
+                            'shifts': {} }
+                            }
+                        }
             elif not job.id in days[shift.time_day()]['jobs']:
-                days[shift.time_day()]['jobs'][job.id] = deepcopy(jout)
-
+                days[shift.time_day()]['jobs'][job.id] = {
+                        'name': job.name,
+                        'shifts': {}
+                        }
+            
             days[shift.time_day()]['jobs'][job.id]['shifts'][shift.id] = {
                     'id':shift.id,
                     'time':shift.time_hours(),
@@ -177,18 +186,15 @@ def export_giftlist_by_day(request, event_url_name, type):
                     'num_missing': range(shift.number - shift.num_helpers()),
                     'num_registered': shift.num_helpers(),
                     'helpers':shift.helper_set.all() }
+    days = OrderedDict(sorted(days.items()))
 
-    days = sorted(days)
-    for d in days:
-        for j in jobs:
-            j['shifts'] = sorted(j['shifts'])
     e = {
             'days':days,
             'event':event,
             'shift_gifts': shift_gifts,
     }
     return export_userlist(request, event_url_name, type,
-                           "registration/tex/gift_list_by_day.tex", "marken", e)
+                           "registration/tex/gift_list_by_day.tex", "marken_by_day", e)
 
 
 @login_required
@@ -232,11 +238,9 @@ def export_giftlist_by_ressort(request, event_url_name, type):
                     'helpers':shift.helper_set.all() }
             jout['day'][shift.time_day()]['shifts'].append(sout)
         jobs[job.id] = jout
-
-    for j in jobs:
-        j['days'] = sorted(j['days'])
-        for d in days:
-            j['shifts'] = sorted(j['shifts'])
+    
+    for jid,j in jobs.items():
+        j['day'] = OrderedDict(sorted(j['day'].items()))
 
     e = {
             'jobs':jobs,
@@ -244,7 +248,7 @@ def export_giftlist_by_ressort(request, event_url_name, type):
             'shift_gifts': shift_gifts,
     }
     return export_userlist(request, event_url_name, type,
-                           "registration/tex/gift_list_by_ressort.tex", "marken", e)
+                           "registration/tex/gift_list_by_ressort.tex", "marken_by_ressort", e)
 
 @login_required
 @archived_not_available

@@ -11,4 +11,7 @@ def pdflatex(texfile, context, pdfout):
     pdf = PdfLatexBuilder(pdflatex='pdflatex').build_pdf(rendered,
                                                          texinputs=[tex_path, ''])
     pdf.save_to(pdfout)
+    with open('/tmp/helfersystem_cache.tex', 'wb') as f:
+        f.write(rendered)
+
 
