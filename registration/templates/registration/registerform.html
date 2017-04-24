@@ -38,6 +38,7 @@
                 {% for day, shifts in shifts.items %}
                     <td>
                     {% for shift in shifts %}
+					{% if not shift.hidden %}
                         {# checkbox #}
                         {{ form | lookup_shift:shift.pk }}
                         <label>
@@ -63,6 +64,7 @@
                         </label>
 
                         <br />
+					{% endif %}
                     {% endfor %}
                     </td>
                 {% endfor %}

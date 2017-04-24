@@ -58,6 +58,12 @@ class Shift(models.Model):
                        "the shift is blocked."),
     )
 
+    hidden = models.BooleanField(
+        default=False,
+        verbose_name=_("This shift is not yet publicly visible. "
+                      "It has to be opened manually")
+    )
+
     gifts = models.ManyToManyField(
         'gifts.GiftSet',
         verbose_name=_("Gifts"),
