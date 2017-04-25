@@ -177,7 +177,7 @@ def export_giftlist_by_day(request, event_url_name, type):
                         'name': job.name,
                         'shifts': {}
                         }
-            
+
             days[shift.time_day()]['jobs'][job.id]['shifts'][shift.id] = {
                     'id':shift.id,
                     'time':shift.time_hours(),
@@ -186,7 +186,9 @@ def export_giftlist_by_day(request, event_url_name, type):
                     'num_missing': range(shift.number - shift.num_helpers()),
                     'num_registered': shift.num_helpers(),
                     'helpers':shift.helper_set.all() }
-    days = OrderedDict(sorted(days.items()))
+    def getKey(e):
+        return int(float(e[0][:3]))
+    days = OrderedDict(sorted(days.items(), key=getKey))
 
     e = {
             'days':days,
@@ -224,7 +226,7 @@ def export_giftlist_by_ressort(request, event_url_name, type):
                 }
 
         for shift in job.shift_set.all():
-            if not shift.time_day in jout['day']:
+            if not shift.time_day() in jout['day']:
                 jout['day'][shift.time_day()] = {
                         'dow':dow_to_str[shift.time_day_of_week()],
                         'shifts':[] }
@@ -238,9 +240,12 @@ def export_giftlist_by_ressort(request, event_url_name, type):
                     'helpers':shift.helper_set.all() }
             jout['day'][shift.time_day()]['shifts'].append(sout)
         jobs[job.id] = jout
-    
+
+    def getKey(e):
+        return int(float(e[0][:3]))
+
     for jid,j in jobs.items():
-        j['day'] = OrderedDict(sorted(j['day'].items()))
+        j['day'] = OrderedDict(sorted(j['day'].items(), key=getKey))
 
     e = {
             'jobs':jobs,

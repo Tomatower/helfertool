@@ -12,42 +12,44 @@
 \usepackage{multirow}
 \usepackage{pbox}
 \usepackage{titlesec}
+\usepackage{float}
 
 \usepackage[top=1.5cm,bottom=1.5cm,left=2.0cm,right=1.5cm]{geometry}
 
 \renewcommand*{\arraystretch}{1.5}
 
-\fancypagestyle{plain}{%
-  \fancyhf{}%
-  \fancyhead[C]{Markenliste(Ressort) - \rightmark}%
-  \fancyhead[R]{\thepage}%
-  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
-  \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
-}
-\pagestyle{plain}
+\pagestyle{fancy}
 \renewcommand{\sectionmark}[1]{\markright{#1}}
-\renewcommand{\subsectionmark}[1]{\markright{#1}}
-\renewcommand\thesection{} %% Disable section counting
-\renewcommand\thesubsection{} %% Disable section counting
-\renewcommand\thesubsubsection{} %% Disable section counting
+\fancyhf{}
+\rhead{\fancyplain{}{\tiny Ressort - \LARGE \thepage }}
+\lhead{\fancyplain{}{\LARGE \rightmark }}
+\cfoot{\fancyplain{}{\thepage}}
+
+\newcommand{\fakesection}[1]{%
+  \par\refstepcounter{section}% Increase section counter
+  \sectionmark{#1}% Add section mark (header)
+  % Add more content here, if needed.
+  % but do not print stuff.
+}
 
 \titlespacing\subsubsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
 
 \begin{document}
-\section{Markenliste(Ressort)}
 {% for jobid, job in jobs.items %}
-\subsection{ {{ job.name |latex}} }
+\fakesection{ {{ job.name |latex}} }
 {% for date,day in job.day.items %}
-\subsubsection { {{day.dow}} - {{date}} }
+\subsection { {{day.dow}} - {{date}} }
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
-\begin{longtable}{|p{2.1cm}|p{4.7cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
+\begin{table}[H]
+\begin{longtable}{|p{2.1cm}|p{5.5cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
 \hline
 	Schicht & Name & B & E & P & Unterschrift \\{% for shift in day.shifts %}
 \hline
 \hline{% with shift_gifts|bykey:shift.id as gift %}
-	\multirow{ {{shift.number}} }{*}{\pbox{2.1cm} { {{shift.time |latex}} {% if shift.name %}\\ \textbf{ {{shift.name |latex}} }{% endif %} } } {% for helper in shift.helpers.all|helpersort:"surname" %}
+	\multirow{ {{shift.number}} }{*}{
+  \pbox{2.1cm} { {{shift.time |latex}} {% if shift.name %}\\ \textbf{ {{shift.name |latex}} }{% endif %} } } {% for helper in shift.helpers.all|helpersort:"surname" %}
 	& {{ helper.surname |latex}}, {{ helper.firstname |latex}}
 	& {{ gift.beer|latex }}
 	& {{ gift.food|latex }}
@@ -61,7 +63,9 @@
 	& \\
 	\cline{2-6}{% endfor %} %missing in shift
 	\hline {% endwith %} {% endfor %}
-\end{longtable} {% endfor %} %days
+\end{longtable}
+\end{table}{% endfor %} %days
+
 \clearpage {% endfor %} %jobs
 
 \end{document}

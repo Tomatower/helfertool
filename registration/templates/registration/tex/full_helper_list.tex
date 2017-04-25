@@ -31,15 +31,14 @@
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
-\begin{longtable}{|p{4.5cm}|p{2.2cm}|p{2.2cm}|p{4.5cm}|p{2cm}}
+\begin{longtable}{|p{5cm}|p{3.5cm}|p{4.5cm}|p{2cm}}
 \hline
-	Name & Adresse & Telefon & Email & Kommentar \\
+	Name & Telefon & Email & Kommentar \\
 \hline
 \hline
 {% for helper in event.helper_set.all|helpersort:"surname" %}
-{{ helper.surname |latex}}, {{ helper.firstname |latex}} 
-	& [[TBD]] 
-	& {{ helper.phone |latex}} 
+{{ helper.surname |latex}}, {{ helper.firstname |latex}}
+	& {{ helper.phone |latex}}
 	& {{ helper.email |latex}} \\
 \hline
 {% endfor %}
