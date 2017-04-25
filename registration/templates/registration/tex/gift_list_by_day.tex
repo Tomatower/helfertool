@@ -13,6 +13,7 @@
 \usepackage{pbox}
 \usepackage{titlesec}
 \usepackage{float}
+\usepackage{caption}
 
 \usepackage[top=1.5cm,bottom=1.5cm,left=2.0cm,right=1.5cm]{geometry}
 
@@ -24,7 +25,6 @@
 \fancyhf{}
 \rhead{\fancyplain{}{\tiny Datum - \LARGE \thepage }}
 \lhead{\fancyplain{}{\LARGE \rightmark }}
-\cfoot{\fancyplain{}{\thepage}}
 
 \newcommand{\fakesection}[1]{%
   \par\refstepcounter{section}% Increase section counter
@@ -33,17 +33,24 @@
   % but do not print stuff.
 }
 
+\renewcommand{\captionabove}[2][]{%
+    \vskip-\abovecaptionskip
+    \vskip+\belowcaptionskip
+    \vskip 0.1cm
+    \LARGE \textbf{#2} \normalsize %
+    \vskip+\abovecaptionskip
+    \vskip-\belowcaptionskip
+}
+
 \titlespacing\subsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
 
-\begin{document}
-{% for date,day in days.items %}
-\fakesection { {{day.dow}} - {{date}} }
-{% for jobid,job in day.jobs.items %}
-\subsection*{ {{ job.name |latex}} }
+\begin{document} {% for date,day in days.items %}
+\fakesection { {{day.dow}} - {{date}} } {% for jobid,job in day.jobs.items %}
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
 \begin{table}[H]
+\captionabove{ {{ job.name |latex}} }
 \begin{longtable}{|p{2.1cm}|p{7cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{5cm}|}
 	\hline
 	Schicht & Name & B & E & P & Unterschrift \\ {% for shiftid, shift in job.shifts.items %}

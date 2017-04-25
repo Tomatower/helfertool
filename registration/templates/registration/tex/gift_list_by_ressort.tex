@@ -23,7 +23,6 @@
 \fancyhf{}
 \rhead{\fancyplain{}{\tiny Ressort - \LARGE \thepage }}
 \lhead{\fancyplain{}{\LARGE \rightmark }}
-\cfoot{\fancyplain{}{\thepage}}
 
 \newcommand{\fakesection}[1]{%
   \par\refstepcounter{section}% Increase section counter
@@ -32,17 +31,26 @@
   % but do not print stuff.
 }
 
+\renewcommand{\captionabove}[2][]{%
+    \vskip-\abovecaptionskip
+    \vskip+\belowcaptionskip
+    \vskip 0.1cm
+    \LARGE \textbf{#2} \normalsize %
+    \vskip+\abovecaptionskip
+    \vskip-\belowcaptionskip
+}
+
 \titlespacing\subsubsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
 
 \begin{document}
 {% for jobid, job in jobs.items %}
 \fakesection{ {{ job.name |latex}} }
 {% for date,day in job.day.items %}
-\subsection { {{day.dow}} - {{date}} }
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
 \begin{table}[H]
+\captionabove{ {{day.dow}} - {{date}} }
 \begin{longtable}{|p{2.1cm}|p{5.5cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
 \hline
 	Schicht & Name & B & E & P & Unterschrift \\{% for shift in day.shifts %}
