@@ -19,16 +19,68 @@
 
             {% bootstrap_form_errors form %}
 
-            {% for helper in form.helpers.field.queryset %}
-                <input id="helper_{{ forloop.counter0 }}"
-                       name="helpers"
-                       required="required"
-                       type="radio"
-                       value="{{ helper.pk }}"
-                />
-                <label for="helper_{{ forloop.counter0 }}">
-                    {% trans "Keep this data" %}
-                </label>
+            {% for helper in form.helpers %}
+            <table clas="table-condensed">
+                <tr>
+                    <th>{% trans "Name" %}: </th>
+                    <td>
+                        <input id="helper_name_{{ forloop.counter0}}"
+                               name="helper_name"
+                               type="radio"
+                               required="required"
+                               value="{{ helper.pk }}"
+                        />
+                        <label for="helper_name_{{ forloop.counter0}}">
+                            {{ helper.firstname }} {{ helper.surname }}
+                        </label>
+                        </td>
+                </tr>
+
+                <tr>
+                    <th>{% trans "E-Mail" %}: </th>
+                    <td>
+                        <input id="helper_email_{{ forloop.counter0}}"
+                               name="helper_email"
+                               type="radio"
+                               required="required"
+                               value="{{ helper.pk }}"
+                        />
+                        <label for="helper_email_{{ forloop.counter0}}">
+                            {{ helper.email }}
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>{% trans "Mobile phone" %}: </th>
+                    <td>
+                        <input id="helper_phone_{{ forloop.counter0}}"
+                               name="helper_phone"
+                               type="radio"
+                               required="required"
+                               value="{{ helper.pk }}"
+                        />
+                        <label for="helper_phone_{{ forloop.counter0}}">
+                            {{ helper.phone }}
+                        </label>
+                    </td>
+                </tr>
+
+                {% if event.ask_shirt %}
+                <tr>
+                    <th>{% trans "T-shirt" %}: </th>
+                    <td>
+                        <input id="helper_shirt_{{ forloop.counter0}}"
+                               name="helper_shirt"
+                               type="radio"
+                               value="{{ helper.pk }}"
+                        />
+                        <label for="helper_shirt_{{ forloop.counter0}}">
+                            {{ helper.get_shirt_display }}
+                        </label>
+                    </td>
+                </tr>
+                {% endif %}
 
                 {% include "registration/helper_data.html" with helper=helper badge_barcode=helper.badge.barcode %}
             {% endfor %}
