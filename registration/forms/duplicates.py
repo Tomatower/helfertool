@@ -1,7 +1,5 @@
 from django import forms
 
-from pprint import pprint
-
 class MergeDuplicatesForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.helpers = kwargs.pop('helpers')
@@ -56,7 +54,6 @@ class MergeDuplicatesForm(forms.Form):
 
 
     def merge(self):
-        pprint(self.cleaned_data)
         ref = self.cleaned_data['helper_email']
 
         if self.cleaned_data['helper_comment']:
