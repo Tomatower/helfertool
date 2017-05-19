@@ -44,6 +44,9 @@
 
 \titlespacing\subsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
 
+\setlength{\textfloatsep}{0.1cm}
+
+
 \begin{document} {% for date,day in days.items %}
 \fakesection { {{day.dow}} - {{date}} } {% for jobid,job in day.jobs.items %}
 \noindent
@@ -70,9 +73,15 @@
 	& {% if shift.deposit %}P{% endif %}
 	& \\
 	\cline{2-6} {% endfor %} %missing in shift
-	\hline {% endwith %} {% endfor %} %shifts
+	\hline {% endwith %}
 \end{longtable}
-\end{table} {% endfor %}
+\end{table}
+\vspace{-0.8cm}
+\begin{table}[H]
+\begin{longtable}{|p{2.1cm}|p{7cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{5cm}|}{% endfor %} %shifts
+\end{longtable}
+\end{table}
+ {% endfor %}
 \clearpage
 {% endfor %} %jobs
 

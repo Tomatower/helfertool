@@ -42,6 +42,9 @@
 
 \titlespacing\subsubsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
 
+\setlength{\textfloatsep}{0.1cm}
+
+
 \begin{document}
 {% for jobid, job in jobs.items %}
 \fakesection{ {{ job.name |latex}} }
@@ -51,26 +54,30 @@
 \setlength\LTright{0pt}
 \begin{table}[H]
 \captionabove{ {{day.dow}} - {{date}} }
-\begin{longtable}{|p{2.1cm}|p{5.5cm}|p{0.3cm}|p{0.3cm}|p{0.5cm}|p{6cm}|}
+\begin{longtable}{|p{2.1cm}|p{7cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{5cm}|}
 \hline
-	Schicht & Name & B & E & P & Unterschrift \\{% for shift in day.shifts %}
-\hline
+	Schicht & Name & B & E & P & Unterschrift \\ \hline{% for shift in day.shifts %}
 \hline{% with shift_gifts|bykey:shift.id as gift %}
 	\multirow{ {{shift.number}} }{*}{
   \pbox{2.1cm} { {{shift.time |latex}} {% if shift.name %}\\ \textbf{ {{shift.name |latex}} }{% endif %} } } {% for helper in shift.helpers.all|helpersort:"surname" %}
 	& {{ helper.surname |latex}}, {{ helper.firstname |latex}}
 	& {{ gift.beer|latex }}
 	& {{ gift.food|latex }}
-	& {% if shift.deposit %}P{% endif %} 
+	& {% if shift.deposit %}P{% endif %}
 	& \\
 	\cline{2-6}{% endfor %}{% for _ in shift.num_missing %}
 	& %multirow
-	& {{ gift.beer |latex}} 
-	& {{ gift.food |latex}} 
-	& {% if shift.deposit %}P{% endif %} 
+	& {{ gift.beer |latex}}
+	& {{ gift.food |latex}}
+	& {% if shift.deposit %}P{% endif %}
 	& \\
 	\cline{2-6}{% endfor %} %missing in shift
-	\hline {% endwith %} {% endfor %}
+    \hline {% endwith %}
+\end{longtable}
+\end{table}
+\vspace{-0.8cm}
+\begin{table}[H]
+\begin{longtable}{|p{2.1cm}|p{7cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{5cm}|}{% endfor %} %shifts
 \end{longtable}
 \end{table}{% endfor %} %days
 

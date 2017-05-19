@@ -155,30 +155,28 @@ def export_giftlist_by_day(request, event_url_name, type):
     shift_gifts, missing_shifts = calc_shift_property(event)
 
     # Day / Job / Shift / Helper
-    days = {}
+    days = OrderedDict()
     dow_to_str = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
     for job in event.job_set.all():
         jout = {
                 'name':job.name,
-                'shifts':{}
+                'shifts':OrderedDict
                 }
-
         for shift in job.shift_set.all():
-            if not shift.time_day() in days:
+            if not shift.time_day() in days.keys():
                 days[shift.time_day()] = {
                         'dow':dow_to_str[shift.time_day_of_week()],
-                        'jobs':{job.id: { 
+                        'jobs':{job.id: {
                             'name': job.name,
-                            'shifts': {} }
+                            'shifts': OrderedDict() }
                             }
                         }
             elif not job.id in days[shift.time_day()]['jobs']:
                 days[shift.time_day()]['jobs'][job.id] = {
                         'name': job.name,
-                        'shifts': {}
+                        'shifts': OrderedDict()
                         }
-
-            days[shift.time_day()]['jobs'][job.id]['shifts'][shift.id] = {
+            days[shift.time_day()]['jobs'][job.id]['shifts'][shift.time_hours] = {
                     'id':shift.id,
                     'time':shift.time_hours(),
                     'name':shift.name,
@@ -186,9 +184,6 @@ def export_giftlist_by_day(request, event_url_name, type):
                     'num_missing': range(shift.number - shift.num_helpers()),
                     'num_registered': shift.num_helpers(),
                     'helpers':shift.helper_set.all() }
-    def getKey(e):
-        return int(float(e[0][:3]))
-    days = OrderedDict(sorted(days.items(), key=getKey))
 
     e = {
             'days':days,
@@ -242,7 +237,7 @@ def export_giftlist_by_ressort(request, event_url_name, type):
         jobs[job.id] = jout
 
     def getKey(e):
-        return int(float(e[0][:3]))
+        return e[0]
 
     for jid,j in jobs.items():
         j['day'] = OrderedDict(sorted(j['day'].items(), key=getKey))
