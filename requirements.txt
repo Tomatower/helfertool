@@ -6,9 +6,12 @@ django-bleach
 django-ckeditor
 django-axes
 django_ical
-celery
+django-secret-key
 amqp
 XlsxWriter
 Pillow
 reportlab
 python-magic>=0.4.12
+latex
+mysqlclient
+libmagic

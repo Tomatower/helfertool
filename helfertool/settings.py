@@ -14,20 +14,7 @@ from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-######################
-#                    #
-# Import local files #
-#                    #
-######################
-
-try:
-    from .settings_local import *
-except ImportError:
-    print("Local configuration missing!")
-    print("")
-    print("Please copy helfertool/settings_local.dist.py to "
-          "helfertool/settings_local.py and adapt to your needs.")
-    sys.exit(1)
+DEBUG=False
 
 ######################################################################
 #                                                                    #
@@ -175,3 +162,18 @@ USE_TZ = True
 # file directories
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'  # must end with '/' !
+
+######################
+#                    #
+# Import local files #
+#                    #
+######################
+
+try:
+    from .settings_local import *
+except ImportError:
+    print("Local configuration missing!")
+    print("")
+    print("Please copy helfertool/settings_local.dist.py to "
+          "helfertool/settings_local.py and adapt to your needs.")
+    sys.exit(1)
