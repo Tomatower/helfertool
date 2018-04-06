@@ -23,6 +23,7 @@ class Shift(models.Model):
         :blocked: shift is blocked, if the job is public
         :hidden: shift is not displayed publicly
         :name: name of the shift (optional)
+        :deposit a deposit has to be made in advance to receive the gifts
     """
     class Meta:
         ordering = ['job', 'begin', 'end']
@@ -69,6 +70,11 @@ class Shift(models.Model):
         blank=True,
     )
 
+    deposit = models.BooleanField(
+        default=False,
+        verbose_name=_("A deposit has to be made to receive the gifts."),
+    )
+
     archived_number = models.IntegerField(
         default=0,
         verbose_name=_("Number of registered helpers for archived event"),
@@ -97,6 +103,16 @@ class Shift(models.Model):
         """
         return "%s - %s" % (date_f(localtime(self.begin), 'TIME_FORMAT'),
                             date_f(localtime(self.end), 'TIME_FORMAT'))
+
+    def time_day(self):
+        """ Returns a string representation only of the day. """
+        return date_f(localtime(self.begin), 'DATE_FORMAT')
+
+    def time_day_of_week(self):
+        """ Returns the day of week in the local time  """
+        day = localtime(self.begin)
+        return day.weekday()
+
 
     def time_with_day(self):
         """ Returns a string representation of the day.

@@ -1,0 +1,53 @@
+{% load latex %}
+{% autoescape off %}
+
+\documentclass[a4paper,10pt]{scrartcl}
+%\documentclass[a4paper,11pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+
+\usepackage[top=1.5cm,bottom=1.5cm,left=2.0cm,right=1.5cm]{geometry}
+
+\renewcommand*{\arraystretch}{1.5}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[C]{\rightmark}%
+  \fancyhead[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
+}
+\pagestyle{plain}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand\thesection{} %% Disable section counting
+
+\begin{document}
+\section{Vielhelfer Shirts}
+
+\noindent
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\begin{longtable}{|p{4.7cm}|p{0.5cm}|l|p{6cm}|}
+\hline
+Name & & Größe & Unterschrift \\
+\hline
+\hline
+{% for helper in event.helper_set.all|helpersort:"surname" %}
+{% with helper_gifts|bykey:helper.id as gift %}
+	{% if gift.vshirt > 0 %}
+		{{ helper.surname |latex}}, {{ helper.firstname |latex}}
+		& {{ gift.vhshirt |latex }}
+		& {{ helper.shirt |latex}}
+		& \\
+	\hline
+	{% endif %}
+{% endwith %}
+{% endfor %}
+\end{longtable}
+
+\end{document}
+{% endautoescape %}

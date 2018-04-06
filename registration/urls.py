@@ -235,6 +235,33 @@ urlpatterns = [
         '(?P<job_pk>[0-9]+)/(?P<date_str>\d{4}-\d{2}-\d{2})/$',
         views.export,
         name='export_job_date'),
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/helpers/$',
+        views.export_helpers,
+        name='export_helpers'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/entry/$',
+        views.export_entry,
+        name='export_entry'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/gifts/ressort$',
+        views.export_giftlist_by_ressort,
+        name='export_gifts_by_ressort'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/gifts/time$',
+        views.export_giftlist_by_day,
+        name='export_gifts_by_day'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/shirts/$',
+        views.export_shirtlist,
+        name='export_shirts'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/beershirts/$',
+        views.export_beershirtlist,
+        name='export_beershirts'),
+
+    url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/export/(?P<type>[a-z]+)/deposit/$',
+        views.export_depositlist,
+        name='export_deposit'),
 
     # summaries
     url(r'^(?P<event_url_name>[a-zA-Z0-9]+)/coordinators/$',

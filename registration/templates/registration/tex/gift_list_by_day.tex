@@ -1,0 +1,89 @@
+{% load latex %}
+{% autoescape off %}
+
+\documentclass[a4paper,10pt]{scrartcl}
+%\documentclass[a4paper,11pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{pbox}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{caption}
+
+\usepackage[top=1.5cm,bottom=1.5cm,left=2.0cm,right=1.5cm]{geometry}
+
+\newcommand{\nop}[1]{}
+\renewcommand*{\arraystretch}{1.8}
+
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\fancyhf{}
+\rhead{\fancyplain{}{\tiny Datum - \LARGE \thepage }}
+\lhead{\fancyplain{}{\LARGE \rightmark }}
+
+\newcommand{\fakesection}[1]{%
+  \par\refstepcounter{section}% Increase section counter
+  \sectionmark{#1}% Add section mark (header)
+  % Add more content here, if needed.
+  % but do not print stuff.
+}
+
+\renewcommand{\captionabove}[2][]{%
+    \vskip-\abovecaptionskip
+    \vskip+\belowcaptionskip
+    \vskip 0.1cm
+    \LARGE \textbf{#2} \normalsize %
+    \vskip+\abovecaptionskip
+    \vskip-\belowcaptionskip
+}
+
+\titlespacing\subsection{0pt}{1.0ex plus -1ex minus -.2ex}{-2ex}
+
+\setlength{\textfloatsep}{0.1cm}
+
+
+\begin{document} {% for date,day in days.items %}
+\fakesection { {{day.dow}} - {{date}} } {% for jobid,job in day.jobs.items %}
+\noindent
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\begin{table}[H]
+\captionabove{ {{ job.name |latex}} }
+\begin{longtable}{|p{2.1cm}|p{7cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{5cm}|}
+	\hline
+	Schicht & Name & B & E & P & Unterschrift \\ {% for shiftid, shift in job.shifts.items %}
+	\hline {% with shift_gifts|bykey:shift.id as gift %}
+	\multirow{ {{shift.number}} }{*}{\pbox{2.1cm}
+		{ {{shift.time |latex}} {% if shift.name %}\\ \textbf{ {{shift.name |latex}} }{% endif %} }
+	} {% for helper in shift.helpers.all|helpersort:"surname" %}
+	& {{ helper.surname |latex}}, {{ helper.firstname |latex}}
+	& {{ gift.beer|latex }}
+	& {{ gift.food|latex }}
+	& {% if shift.deposit %}P{% endif %}
+	& \\
+	\cline{2-6} {% endfor %} {% for _ in shift.num_missing %}
+	& %multirow
+	& {{ gift.beer |latex}}
+	& {{ gift.food |latex}}
+	& {% if shift.deposit %}P{% endif %}
+	& \\
+	\cline{2-6} {% endfor %} %missing in shift
+	\hline {% endwith %}
+\end{longtable}
+\end{table}
+\vspace{-0.8cm}
+\begin{table}[H]
+\begin{longtable}{|p{2.1cm}|p{7cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{5cm}|}{% endfor %} %shifts
+\end{longtable}
+\end{table}
+% {% endfor %} %jobs
+\clearpage
+% {% endfor %} %days
+
+\end{document}
+{% endautoescape %}

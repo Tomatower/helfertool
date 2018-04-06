@@ -66,7 +66,6 @@
                             <li><a href="{% url "help:create_issue" %}">{% trans "Support" %}</a></li>
                             <li><a href="{% url "logout" %}">{% trans "Logout" %}</a></li>
                         {% else %}
-                            <li><a href="{% url "login" %}">{% trans "Login" %}</a></li>
                             <li><a href="{% url "index" %}">{% trans "Events" %}</a></li>
                         {% endif %}
                         {# end login #}
