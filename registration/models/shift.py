@@ -92,25 +92,25 @@ class Shift(models.Model):
 
         The begin contains the date and time, the end only the time.
         """
-        return "%s, %s - %s" % (date_f(localtime(self.begin), 'DATE_FORMAT'),
-                                date_f(localtime(self.begin), 'TIME_FORMAT'),
-                                date_f(localtime(self.end), 'TIME_FORMAT'))
+        return "%s, %s - %s" % (date_f(self.begin, 'DATE_FORMAT'),
+                                date_f(self.begin, 'TIME_FORMAT'),
+                                date_f(self.end, 'TIME_FORMAT'))
 
     def time_hours(self):
         """ Returns a string representation of the begin and end time.
 
         Only the time is used, the date is not shown.
         """
-        return "%s - %s" % (date_f(localtime(self.begin), 'TIME_FORMAT'),
-                            date_f(localtime(self.end), 'TIME_FORMAT'))
+        return "%s - %s" % (date_f(self.begin, 'TIME_FORMAT'),
+                            date_f(self.end, 'TIME_FORMAT'))
 
     def time_day(self):
         """ Returns a string representation only of the day. """
-        return date_f(localtime(self.begin), 'DATE_FORMAT')
+        return date_f(self.begin, 'DATE_FORMAT')
 
     def time_day_of_week(self):
         """ Returns the day of week in the local time  """
-        day = localtime(self.begin)
+        day = self.begin
         return day.weekday()
 
 
@@ -119,7 +119,7 @@ class Shift(models.Model):
 
         If the shift is on two days only the name of the first day is returned.
         """
-        day = date_f(localtime(self.begin), "l")
+        day = date_f(self.begin, "l")
         return "{}, {}".format(day, self.time())
 
     def num_helpers(self):

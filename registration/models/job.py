@@ -125,7 +125,7 @@ class Job(models.Model):
         # iterate over all shifts and group them by day
         # (itertools.groupby is strange...)
         for shift in shifts:
-            day = localtime(shift.begin).date()
+            day = shift.begin.date()
 
             # add to list
             if day in tmp_shifts:
