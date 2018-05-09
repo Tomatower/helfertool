@@ -59,5 +59,6 @@ def merge(request, event_url_name, email):
                                                 args=[event_url_name, h.pk]))
 
     context = {'event': event,
-               'form': form}
+               'form': form,
+               'helpers': helpers}
     return render(request, 'registration/admin/merge.html', context)
