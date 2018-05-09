@@ -11,11 +11,11 @@ Ich bin darauf hingewiesen worden, dass die im Rahmen der vorstehend genannten Z
 
 Ich bin zudem darauf hingewiesen worden, dass die Erhebung, Verarbeitung und Nutzung meiner Daten auf freiwilliger Basis erfolgt. Ferner, dass ich mein Einverständnis mit der Folge, dass ich bei der Veranstaltung nicht als Helfer teilnehmen kann, verweigern bzw. jederzeit mit Wirkung für die Zukunft widerrufen kann. Meine Widerrufserklärung werde ich richten an:
 
-Verein Kulturleben in der Studentenstadt<br />
-Christoph-Probst-Str. 12/027<br />
-80805 München<br />
-E+-Mail: {% setting "CONTACT_MAIL" %}
-+
+Verein Kulturleben in der Studentenstadt
+Christoph-Probst-Str. 12/027
+80805 München
+E-Mail: {% setting "CONTACT_MAIL" %}
+
 Im Fall des Widerrufs werden mit dem Zugang meiner Widerrufserklärung meine Daten gelöscht.{% else %}
 With your permission, your data will be collected, processed, and used for the following purposes:
 
