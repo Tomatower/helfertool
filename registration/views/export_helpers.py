@@ -68,7 +68,6 @@ def calc_shift_property(event):
         for shift in job.shift_set.all():
             missing_shifts[shift.id] = shift.number - len(shift.helper_set.all())
             for giftset in shift.gifts.all():
-
                 tmp = { x: 0 for x in shift_gift_mapping.values() }
                 for gift in giftset.includedgift_set.all():
                     tmp[gift.gift_id] = gift.count
@@ -87,7 +86,7 @@ def calc_user_gifts(event):
         for shift in job.shift_set.all():
             shift_gifts = {'beer':0,'food':0, 'vhshirt':0, 'beershirt':0}
             for giftset in shift.gifts.all():
-                tmp = {1:0,2:0,3:0,4:0,}
+                tmp = { x: 0 for x in shift_gift_mapping.values() }
                 for gift in giftset.includedgift_set.all():
                     tmp[gift.gift_id] = gift.count
                 shift_gifts = {
