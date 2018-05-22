@@ -19,6 +19,10 @@ from ..export.pdf import pdf
 from ..export.tex_pdf import pdflatex
 from ..decorators import archived_not_available
 
+# TODO:
+# This shit has to be re-implemented whenever a new event happens
+# using `select * from gifts_gift;`
+shift_gift_mapping = {'beer':6,'food':7,'vshirt':8,'beershirt':9,}
 
 def export_userlist(request, event_url_name, type, template, file_append, event=None, extra=None):
     # check for valid export type
@@ -64,14 +68,16 @@ def calc_shift_property(event):
         for shift in job.shift_set.all():
             missing_shifts[shift.id] = shift.number - len(shift.helper_set.all())
             for giftset in shift.gifts.all():
-                tmp = {1:0,2:0,3:0,4:0,}
+
+                tmp = { x: 0 for x in shift_gift_mapping.values() }
                 for gift in giftset.includedgift_set.all():
                     tmp[gift.gift_id] = gift.count
                 shift_gifts[shift.id] = {
-                        'beer': tmp[1],
-                        'food': tmp[2],
-                        'vhshirt': tmp[3]/10,
-                        'beershirt': tmp[4]/10 }
+                        'beer': tmp[shift_gift_mapping['beer']],
+                        'food': tmp[shift_gift_mapping['food']],
+                        'vhshirt': tmp[shift_gift_mapping['vshirt']]/10,
+                        'beershirt': tmp[shift_gift_mapping['beershirt']]/10
+                }
 
     return shift_gifts, missing_shifts
 
@@ -85,10 +91,11 @@ def calc_user_gifts(event):
                 for gift in giftset.includedgift_set.all():
                     tmp[gift.gift_id] = gift.count
                 shift_gifts = {
-                        'beer': tmp[1],
-                        'food': tmp[2],
-                        'vhshirt': tmp[3]/10,
-                        'beershirt': tmp[4]/10 }
+                        'beer': tmp[shift_gift_mapping['beer']],
+                        'food': tmp[shift_gift_mapping['food']],
+                        'vhshirt': tmp[shift_gift_mapping['vshirt']]/10,
+                        'beershirt': tmp[shift_gift_mapping['beershirt']]/10
+                    }
 
             for helper in shift.helper_set.all():
                 if not helper.id in user_gifts:
