@@ -193,9 +193,9 @@ def export_giftlist_by_day(request, event_url_name, type):
                     'helpers':shift.helper_set.all() }
 
     e = {
-            'days':days,
-            'event':event,
-            'shift_gifts': shift_gifts,
+        'days':OrderedDict(sorted(days.items())),
+        'event':event,
+        'shift_gifts': shift_gifts,
     }
     return export_userlist(request, event_url_name, type,
                            "registration/tex/gift_list_by_day.tex", "marken_by_day", e)
