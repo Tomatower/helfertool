@@ -16,7 +16,10 @@ Christoph-Probst-Str. 12/027
 80805 München
 E-Mail: {% setting "CONTACT_MAIL" %}
 
-Im Fall des Widerrufs werden mit dem Zugang meiner Widerrufserklärung meine Daten gelöscht.{% else %}
+Im Fall des Widerrufs werden mit dem Zugang meiner Widerrufserklärung meine Daten gelöscht.
+
+Weitere Details zum Datenschutz gibt es in der <a href="/datenschutz/">Datenschutzerklärung</a>.
+{% else %}
 With your permission, your data will be collected, processed, and used for the following purposes:
 
  * Generating lists of all helpers
@@ -38,3 +41,5 @@ Christoph-Probst-Str. 12/027
 E-Mail: {% setting "CONTACT_MAIL" %}
 
 In the event of cancellation, your data will be deleted upon receipt of your notice.{% endif %}
+
+More details regarding privacy are in our <a href="/datenschutz/">privacy statement</a> (german).

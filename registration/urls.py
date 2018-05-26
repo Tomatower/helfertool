@@ -25,6 +25,11 @@ urlpatterns = [
         TemplateView.as_view(template_name='registration/about.html'),
         name='about'),
 
+    # about
+    url(r'^datenschutz/$',
+        TemplateView.as_view(template_name='registration/datenschutz.html'),
+        name='about'),
+
     # account
     url(r'^account/$',
         views.change_user,
