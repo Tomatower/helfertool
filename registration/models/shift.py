@@ -122,6 +122,9 @@ class Shift(models.Model):
         day = date_f(self.begin, "l")
         return "{}, {}".format(day, self.time())
 
+    def time_day_iso(self):
+        return self.begin.isoformat().split("T")[0]
+
     def num_helpers(self):
         """
         Returns the current number of helpers, but 0 if event is archived.

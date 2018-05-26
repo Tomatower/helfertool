@@ -26,14 +26,14 @@
 \renewcommand\thesection{} %% Disable section counting
 
 \begin{document}
-\section{Eintrittsliste}
+\section{Pfandliste}
 
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
 \begin{longtable}{|p{4.7cm}|p{6cm}|p{6cm}|}
 \hline
-	Name & Pfand Erhalten(Infozelt) & Pfand zurück (Helfer)  \\
+	Name & Pfand erhalten (Infozelt) & Pfand zurück (Helfer)  \\
 \hline
 \hline
 	{% for helper in event.helper_set.all|helpersort:"surname" %}

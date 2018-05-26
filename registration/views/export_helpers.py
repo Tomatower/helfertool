@@ -27,12 +27,12 @@ shift_gift_mapping = {'beer':6,'food':7,'vshirt':8,'beershirt':9,}
 def export_userlist(request, event_url_name, type, template, file_append, event=None, extra=None):
     # check for valid export type
     if type not in ["excel", "pdf"]:
-        print ("Type missmatch: %s" % type)
+        print ("Type missmatch: %s"%type)
         raise Http404
 
     # get event
     if event is None:
-        event = { 'event':get_object_or_404(Event, url_name=event_url_name) }
+        event = {'event':get_object_or_404(Event, url_name=event_url_name)}
 
     # list of jobs for export
     # check permission
@@ -170,19 +170,20 @@ def export_giftlist_by_day(request, event_url_name, type):
                 }
         for shift in job.shift_set.all():
             if not shift.time_day() in days.keys():
-                days[shift.time_day()] = {
+                days[shift.time_day_iso()] = {
                         'dow':dow_to_str[shift.time_day_of_week()],
+                        'date':shift.time_day(),
                         'jobs':{job.id: {
                             'name': job.name,
                             'shifts': OrderedDict() }
                             }
                         }
-            elif not job.id in days[shift.time_day()]['jobs']:
-                days[shift.time_day()]['jobs'][job.id] = {
+            elif not job.id in days[shift.time_day_iso()]['jobs']:
+                days[shift.time_day_iso()]['jobs'][job.id] = {
                         'name': job.name,
                         'shifts': OrderedDict()
                         }
-            days[shift.time_day()]['jobs'][job.id]['shifts'][shift.time_hours] = {
+            days[shift.time_day_iso()]['jobs'][job.id]['shifts'][shift.time_hours] = {
                     'id':shift.id,
                     'time':shift.time_hours(),
                     'name':shift.name,
@@ -275,7 +276,7 @@ def export_shirtlist(request, event_url_name, type):
     user_gifts = calc_user_gifts(event)
     e = {
             'event':event,
-            'user_gifts': user_gifts,
+            'helper_gifts': user_gifts,
     }
 
     return export_userlist(request, event_url_name, type,

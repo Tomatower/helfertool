@@ -10,6 +10,7 @@
 \usepackage{longtable}
 \usepackage{fancyhdr}
 \usepackage[tableposition=top]{caption}
+\usepackage{lscape}
 
 \usepackage[top=1.5cm,bottom=1.5cm,left=1.7cm,right=1.5cm]{geometry}
 
@@ -27,12 +28,13 @@
 \renewcommand\thesection{} %% Disable section counting
 
 \begin{document}
+\begin{landscape}
 \section{Helferliste}
 
 \noindent
 \setlength\LTleft{0pt}
 \setlength\LTright{0pt}
-\begin{longtable}{|p{5cm}|p{3.5cm}|p{4.5cm}|p{2cm}}
+\begin{longtable}{|p{6cm}|p{4.5cm}|p{5.5cm}|p{8cm}}
 \hline
 	Name & Telefon & Email & Kommentar \\
 \hline
@@ -44,6 +46,6 @@
 \hline
 {% endfor %}
 \end{longtable}
-
+\end{landscape}
 \end{document}
 {% endautoescape %}
