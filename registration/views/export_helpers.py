@@ -169,7 +169,7 @@ def export_giftlist_by_day(request, event_url_name, type):
                 'shifts':OrderedDict
                 }
         for shift in job.shift_set.all():
-            if not shift.time_day() in days.keys():
+            if not shift.time_day_iso() in days.keys():
                 days[shift.time_day_iso()] = {
                         'dow':dow_to_str[shift.time_day_of_week()],
                         'date':shift.time_day(),
