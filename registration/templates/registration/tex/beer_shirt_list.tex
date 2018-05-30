@@ -38,7 +38,7 @@ Name & & Größe & Unterschrift \\
 \hline
 {% for helper in event.helper_set.all|helpersort:"surname" %}
 {% with helper_gifts|bykey:helper.id as gift %}
-	{% if gift.beershirt > 0 %}
+	{% if gift.beershirt > 0.99 %}
 		{{ helper.surname |latex}}, {{ helper.firstname |latex}}
 		& {{ gift.beershirt |latex }}
 		& {{ helper.shirt |latex}}
