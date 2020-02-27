@@ -159,6 +159,7 @@ MAIL_BATCH_SIZE = dict_get(config, 200, 'mail', 'batch_size')
 MAIL_BATCH_GAP = dict_get(config, 5, 'mail', 'batch_gap')
 
 # authentication
+LOGIN_SHOW_BUTTON = dict_get(config, True, 'customization', 'show_login')
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/manage/account/check/'
 

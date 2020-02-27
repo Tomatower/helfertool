@@ -197,6 +197,10 @@ customization:
     # Contact address for support requests
     contact_address: "helfertool@localhost"
 
+    # Show the login button, if disabled you have to go to the url /login by yourself.
+    # this is to avoid confusion for helpers.
+    show_login: True
+
 # Badge settings
 badges:
     # Path to pdflatex binary

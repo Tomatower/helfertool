@@ -39,7 +39,6 @@
                 <a class="navbar-brand" href="#">
                     <img src="{% static "helfertool/img/logo/logo.svg" %}" height="20" alt="" class="navbar-logo">
                 </a>
-
                 {# button to show menu on small devices#}
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarcontent" aria-controls="navbarcontent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -52,6 +51,7 @@
                             <a class="nav-link" href="{% url "index" %}">{% trans "Events" %}</a>
                         </li>
 
+                        {% setting "LOGIN_SHOW_BUTTON" as LOGIN_SHOW_BUTTON %}
                         {% if user.is_authenticated %}
                             {# logged in #}
                             <li class="nav-item">
@@ -61,7 +61,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url "logout" %}">{% trans "Logout" %}</a>
                             </li>
-                        {% else %}
+                        {% elif LOGIN_SHOW_BUTTON %}
                             {# not logged in #}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url "login" %}">{% trans "Login" %}</a>
